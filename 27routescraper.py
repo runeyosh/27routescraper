@@ -91,7 +91,7 @@ def get_and_store_routeinfo(json_filepath):
     return all_routes_dict
 
 
-def weighted_rating(json_filepath):
+def weighted_rating(json_filepath, min_amount_of_votes=0):
     # Calculated rating weighted with number of ratings. Expression is taken from Imdb's weighted rating for best movies
     # The idea is to "normalise" the score by how many votes it's gotten. A 3 star boulder with 1 vote is not as good as
     # a 2.5 start boulder with 10 votes.
@@ -113,7 +113,7 @@ def weighted_rating(json_filepath):
         global_votes = global_votes + all_routes_dict[k]['ratings']
         dates = dates + [datetime.strptime(d, '%Y-%m-%d')
                          for d in all_routes_dict[k]['dates']]
-        if len(all_routes_dict[k]['ratings']) >= MIN_AMOUNT_OF_VOTES:
+        if len(all_routes_dict[k]['ratings']) >= min_amount_of_votes:
             if all_routes_dict[k]['grade'] not in gradesdict.keys():
                 gradesdict[all_routes_dict[k]['grade']] = {k: all_routes_dict[k]}
             else:
@@ -141,5 +141,5 @@ def weighted_rating(json_filepath):
 if __name__ == "__main__":
     jsonfilename = "{}.json".format('all_boulders_test')
     # get_and_store_routeinfo(jsonfilename)
-    weighted_rating(jsonfilename)
+    weighted_rating(jsonfilename, min_amount_of_votes=MIN_AMOUNT_OF_VOTES)
 
